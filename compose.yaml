@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+  redis:
+    image: "redis:alpine"
+    ports: 
+      - "6379:6379"
+  celery:
+    build: .
+    command: uv run celery -A app.services.celery_service worker --loglevel=INFO

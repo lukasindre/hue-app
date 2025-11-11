@@ -1,0 +1,19 @@
+[project]
+name = "hue-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "celery[redis]>=5.5.3",
+    "fastapi[standard]>=0.121.1",
+    "httpx>=0.28.1",
+    "pydantic>=2.12.4",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.4",
+]
