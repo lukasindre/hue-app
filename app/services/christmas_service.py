@@ -1,5 +1,5 @@
+from app.interfaces.light_server import LightServer
 from app.services.config_service import ConfigService
-from app.services.hue_service import HueService
 import random
 from app.models.set_light_gradients_request import SetLightGradientsRequest
 from app.models.light_fade_out_request import LightFadeOutRequest
@@ -7,8 +7,8 @@ from time import sleep
 
 
 class ChristmasService:
-    def __init__(self, hue_service: HueService, config_service: ConfigService):
-        self._hue_service = hue_service
+    def __init__(self, light_server: LightServer, config_service: ConfigService):
+        self._light_server = light_server
         self._config_service = config_service
         self.christmas_colors = [
             {
@@ -38,12 +38,14 @@ class ChristmasService:
             },
         ]
 
-    def christmas_color_shuffle(self, effect_duration: int):
+    def christmas_color_shuffle(self, effect_duration: int) -> None:
         random.shuffle(self.christmas_colors)
         outdoor_config = self._config_service.outdoor_config()
         sleep_time = effect_duration / 1000
         print("lighting up")
         # TODO: set light state to `on`
+        # TODO: groups these requests and make them async to run concurrently on
+        #       the event loop, and test reliability of that.
         for light in outdoor_config:
             request = SetLightGradientsRequest.model_validate(
                 {
@@ -54,19 +56,19 @@ class ChristmasService:
                     "dynamics": {"duration": effect_duration},
                 }
             )
-            self._hue_service.set_light_gradients(light.id, request)
+            self._light_server.set_light_gradients(light.id, request)
         sleep(sleep_time)
         print("lighting down")
         for light in outdoor_config:
-            request = LightFadeOutRequest.model_validate(
+            fade_request = LightFadeOutRequest.model_validate(
                 {
                     "dimming": {"brightness": 0},
                     "dynamics": {"duration": effect_duration},
                 }
             )
-            self._hue_service.light_fade_out(light.id, request)
+            self._light_server.light_fade_out(light.id, fade_request)
         sleep(sleep_time)
 
-    def christmas_color_shuffle_job(self, effect_duration: int):
+    def christmas_color_shuffle_job(self, effect_duration: int) -> None:
         while True:
             self.christmas_color_shuffle(effect_duration)
