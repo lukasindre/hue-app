@@ -6,7 +6,7 @@ This simple app controls some of my lights at my house.  It is a docker compose 
 You better appreciate this coverage badge, I skipped an arm workout for this.
 
 ## End Result
-![lights](./assets/house-lights.MOV)
+![lights](./assets/lights.MOV)
 
 ## Development
 
