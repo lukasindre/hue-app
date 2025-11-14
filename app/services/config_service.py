@@ -29,7 +29,7 @@ class Config(BaseModel):
 
 
 class ConfigService:
-    def __init__(self):
+    def __init__(self) -> None:
         try:
             with open(f"app/config/{os.environ['ENV']}.yaml", "r") as f:
                 self._config = Config.model_validate(yaml.safe_load(f))

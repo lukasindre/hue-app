@@ -1,0 +1,13 @@
+hue:
+  username-key: HUE_USERNAME
+  token-key: HUE_TOKEN
+  bridge-ip-address: "192.168.163.2"
+
+lights:
+  outdoor:
+    - name: upper-light
+      id: b86e1048-7aed-4b4f-b596-6a0e818d19e5
+      gradient-points: 5
+    - name: porch-light
+      id: 80d7d9d2-448c-4897-a4ff-6a163d6dd244
+      gradient-points: 2

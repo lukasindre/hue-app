@@ -1,14 +1,9 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from typing import Any
 
-from app.services.config_service import ConfigService
 from app.services.hue_service import HueService
-from app.services.christmas_service import ChristmasService
 from app.services.celery_service import app as celery_app, christmas_shuffle
-
-config_service = ConfigService()
-hue_service = HueService(config_service)
-christmas_service = ChristmasService(hue_service, config_service)
+from app.services.factories import get_hue_service
 
 
 app = FastAPI()
@@ -20,7 +15,7 @@ def get_status() -> dict[str, str]:
 
 
 @app.get("/lights")
-def get_lights() -> Any:
+def get_lights(hue_service: HueService = Depends(get_hue_service)) -> Any:
     return hue_service.get_lights().json()
 
 
@@ -38,6 +33,10 @@ def post_cancel() -> dict[str, str]:
     inspect = celery_app.control.inspect()
     active = inspect.active()
     task_ids = []
+
+    if active is None:
+        return {"msg": "no active tasks"}
+
     for worker_tasks in active.values():
         for t in worker_tasks:
             task_ids.append(t["id"])
