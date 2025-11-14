@@ -5,7 +5,11 @@ This simple app controls some of my lights at my house.  It is a docker compose 
 ![coverage](coverage.svg)
 You better appreciate this coverage badge, I skipped an arm workout for this.
 
+## End Result
+![lights](./assets/house-lights.MOV)
+
 ## Development
+
 To run this app, you need docker installed.  You also should run 
 ```sh
 cp .env.skel .env

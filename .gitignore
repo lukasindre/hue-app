@@ -8,6 +8,7 @@ wheels/
 .env
 coverage.xml
 .coverage
+.DS_Store
 
 # Virtual environments
 .venv
