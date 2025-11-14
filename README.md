@@ -3,10 +3,8 @@
 This simple app controls some of my lights at my house.  It is a docker compose stack, including a fastapi app, celery worker, and redis as a message broker.  
 
 ![coverage](coverage.svg)
-You better appreciate this coverage badge, I skipped an arm workout for this.
 
-## End Result
-![lights](./assets/lights.MOV)
+You better appreciate this coverage badge, I skipped an arm workout for this.
 
 ## Development
 
