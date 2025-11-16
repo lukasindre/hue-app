@@ -13,6 +13,7 @@ check:
 	uv run ruff format . --check
 	uv run mypy . --strict
 	make test
+	rm coverage.svg
 	uv run coverage-badge -o coverage.svg
 
 .PHONY: run
