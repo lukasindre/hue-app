@@ -2,7 +2,11 @@ from fastapi import Depends, FastAPI
 from typing import Any
 
 from app.services.hue_service import HueService
-from app.services.celery_service import app as celery_app, christmas_shuffle
+from app.services.celery_service import (
+    app as celery_app,
+    christmas_shuffle,
+    christmas_glow,
+)
 from app.services.factories import get_hue_service
 
 
@@ -23,6 +27,12 @@ def get_lights(hue_service: HueService = Depends(get_hue_service)) -> Any:
 def get_christmas_shuffle() -> dict[str, str]:
     christmas_shuffle.delay()
     return {"msg": "christmas color shuffle enqueued"}
+
+
+@app.post("/christmas_glow")
+def post_christmas_glow() -> dict[str, str]:
+    christmas_glow.delay()
+    return {"msg": "christmas glow enqueued"}
 
 
 # TODO: consider turning this into a decorator for

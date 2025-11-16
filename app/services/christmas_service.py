@@ -72,3 +72,26 @@ class ChristmasService:
     def christmas_color_shuffle_job(self, effect_duration: int) -> None:
         while True:
             self.christmas_color_shuffle(effect_duration)
+
+    def christmas_glow(self, effect_duration: int) -> None:
+        random.shuffle(self.christmas_colors)
+        outdoor_config = self._config_service.outdoor_config()
+        sleep_time = effect_duration / 1000
+        # TODO: set light state to `on`
+        print("shuffling the glow ...")
+        for light in outdoor_config:
+            request = SetLightGradientsRequest.model_validate(
+                {
+                    "dimming": {"brightness": 100},
+                    "gradient": {
+                        "points": self.christmas_colors[: light.gradient_points]
+                    },
+                    "dynamics": {"duration": effect_duration},
+                }
+            )
+            self._light_server.set_light_gradients(light.id, request)
+        sleep(sleep_time)
+
+    def christmas_glow_job(self, effect_duration: int) -> None:
+        while True:
+            self.christmas_glow(effect_duration)
